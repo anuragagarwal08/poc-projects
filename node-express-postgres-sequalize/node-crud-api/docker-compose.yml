@@ -1,0 +1,33 @@
+version: "1.0"
+
+services:
+  node_app:
+    container_name: node_app
+    build: .
+    image: dockeranuragagarwal/node_crud_api
+    ports:
+      - "3000:3000"
+    environment:
+      - PG_DB=nodedb
+      - PG_USER=node_db_usr
+      - PG_PASSWORD=node_db_pass
+      - PG_HOST=node_db
+    depends_on:
+      - node_db
+    restart: always
+
+  node_db:
+    container_name: node_db
+    image: postgres:12
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=nodedb
+      - POSTGRES_USER=node_db_usr
+      - POSTGRES_PASSWORD=node_db_pass
+    volumes:
+      - node_db_data:/var/lib/postgresql/data
+    restart: always
+
+volumes:
+  node_db_data: {}
